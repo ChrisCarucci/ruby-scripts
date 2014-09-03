@@ -18,8 +18,28 @@ class Recording
   end
 
   def convert
-    title = (@type == "ZTL") ? "Market Research - " + @description : "ISD Session - " + @description
-    album = (@type == "ZTL") ? "Zero To Launch" : "Invisible Script Demolishers"
+    title = ""
+    album = ""
+    case @type
+    when "ZTL"
+      title = "Market Research - " + @description
+      album = "Zero To Launch"
+    when "ISD"
+      title = "ISD Session - " + @description
+      album = "Invisible Script Demolishers"
+    when "PING"
+      title = "PING Session - " + @description
+      album = "Practice Interviewing and Negotiation Group"
+    when "STT"
+      title = "STT Session - " + @description
+      album = "Story Toolbox Titans"
+    when "BIZ"
+      title = "Business - " + @description
+      album = "Business"
+    else
+      title = @description
+      album = "Other"
+    end
     lame_command = "lame -V6 --tt '#{title}' --ta 'Jarrett Coggin' --tl '#{album}' --ty '#{@year}' #{@source_path.gsub(' ', '\ ')}"
     puts lame_command
     `#{lame_command}`
@@ -28,7 +48,7 @@ class Recording
 
   def move(destination)
     if @converted
-      FileUtils.mv @source_path.gsub('WAV','mp3').gsub(' ', '\ ') destination+@file_name.gsub('WAV','mp3').gsub(' ', '\ ')
+      FileUtils.mv(@source_path.gsub('WAV','mp3').gsub(' ', '\ '), destination + @file_name.gsub('WAV','mp3').gsub(' ', '\ '))
     end
   end
 end
